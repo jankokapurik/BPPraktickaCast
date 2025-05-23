@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.callbacks import ReduceLROnPlateau
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 
-
 def extract_embeddings(words, model):
     embeddings = []
     for word in words:

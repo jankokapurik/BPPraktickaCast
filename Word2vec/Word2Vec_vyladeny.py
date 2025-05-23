@@ -12,21 +12,17 @@ def extract_embeddings(words, w2v_model, subword_size=3):
     valid_words = []
 
     def get_subwords(word, size):
-        """Generate subwords of a given size from a word."""
         return [word[i:i+size] for i in range(len(word) - size + 1)]
     count_skipped = 0
     for word in words:
         if word in w2v_model:
-            # Use the word's embedding if it exists
             embeddings.append(w2v_model[word])
             valid_words.append(word)
         else:
-            # Use subword embeddings if the word is not found
             subwords = get_subwords(word, subword_size)
             subword_vectors = [w2v_model[subword] for subword in subwords if subword in w2v_model]
             
             if subword_vectors:
-                # Average the subword embeddings to approximate the word embedding
                 embeddings.append(np.mean(subword_vectors, axis=0))
                 valid_words.append(word)
             else:
@@ -45,7 +41,6 @@ def build_classifier(input_dim):
     x = tf.keras.layers.BatchNormalization()(x)
     x = tf.keras.layers.Dropout(0.4)(x)
 
-    # Residual Block 1
     shortcut = x
     x = tf.keras.layers.Dense(512, activation='relu')(x)
     x = tf.keras.layers.BatchNormalization()(x)
@@ -59,13 +54,11 @@ def build_classifier(input_dim):
     x = tf.keras.layers.BatchNormalization()(x)
     x = tf.keras.layers.Dropout(0.3)(x)
 
-    # Residual Block 2
     shortcut = x
     x = tf.keras.layers.Dense(128, activation='relu')(x)
     x = tf.keras.layers.BatchNormalization()(x)
     x = tf.keras.layers.Add()([x, shortcut])
 
-    # Output layer
     outputs = tf.keras.layers.Dense(1, activation='sigmoid')(x)
 
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
@@ -73,11 +66,7 @@ def build_classifier(input_dim):
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0003),
                   loss='binary_crossentropy',
                   metrics=['accuracy'])
-
     return model
-
-
-
 
 dataset_path = './Datasets/Dataset_SubstringWords.txt' 
 model_path = './Models/vec-sk-cbow-lemma'         
@@ -97,7 +86,6 @@ y = np.array([int(word_label_mapping[word]) for word in valid_words if word in w
 print(f"Dataset size: X shape: {X.shape}, y shape: {y.shape}")
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
-
 
 pca = PCA(n_components=100)
 X_train = pca.fit_transform(X_train)
