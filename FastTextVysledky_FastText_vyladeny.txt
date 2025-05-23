@@ -1,0 +1,15 @@
+=== Výsledky klasifikácie neologizmov ===
+
+1. Matica zámien (Confusion Matrix):
+[[42522    11]
+ [  165    81]]
+
+2. Vyvážená presnosť (Balanced Accuracy):
+TPR (True Positive Rate): 0.3293
+TNR (True Negative Rate): 0.9997
+Balanced Accuracy: 0.6645
+
+3. Precision, Recall, F1-skóre:
+Precision: 0.8804
+Recall:    0.3293
+F1-skóre:  0.4793
